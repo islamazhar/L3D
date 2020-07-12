@@ -100,6 +100,7 @@ void TurtleSystem::restore()
   reduction=t.reduction;
   // (Turtle)*this=t; //FIXME: doesn't work, figure out why!
 }
+// Draw a leaf
 void TurtleSystem::drawLeaf(float param)
 {
 
@@ -117,6 +118,7 @@ void TurtleSystem::drawLeaf(float param)
   }
   mesh->TranslateShape(s,position.X(),position.Y(),position.Z());
 }
+
 void TurtleSystem::draw(float param)
 {
   static int num=0;
@@ -134,8 +136,8 @@ void TurtleSystem::draw(float param)
   else
     slices=100;
   R3Shape s=mesh->Cylinder(reduction,slices);
-
-  mesh->ScaleShape(s,param*thickness,param,param*thickness);
+    // x and z will only depend on thickness and y (the forward move) will depend on param!
+  mesh->ScaleShape(s,thickness,param,thickness);
   R3Vector cylinderDirection(0,1,0);
   R3Vector axis=cylinderDirection %  direction; //the axis to rotate on
   axis.Normalize();
@@ -151,9 +153,14 @@ void TurtleSystem::draw(float param)
       // printf("Rotating by %f.\n",rotateAngle*180);
       mesh->RotateShape(s,rotateAngle,axis);
     }
-    
   }
-
+  //printf("Direction: %f %f %f\n",direction.X(),direction.Y(),direction.Z());
   mesh->TranslateShape(s,position.X(),position.Y(),position.Z());
-
+    /*
+  R3Vector t=direction;
+  t.Normalize();
+  double distance = param;
+  R3Vector dis(distance, distance, distance);
+  position+=dis*t;
+    */
 }

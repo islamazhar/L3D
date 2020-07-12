@@ -1,5 +1,9 @@
 #include "lsystem.h"
 #include <fstream>
+#include <stack>
+#include <bits/stdc++.h>
+
+
 using namespace std;
 void LSystem::replaceAll(string& str, const string& from, const string& to) 
 {
@@ -64,13 +68,12 @@ string LSystem::generateFromFile(const char * filename,const int iterationsOverr
 		if (c=='@') break;
 		getline(file,temp);
 		int equalSignPos=temp.find("=");
-		if (equalSignPos==string::npos)
+		if (equalSignPos==-1)
 		{
 			axiom=temp;
 		}
 		else
 		{
-
 			rules[temp.substr(0,equalSignPos)].push_back(temp.substr(equalSignPos+1));
 			// cout <<temp.substr(0,equalSignPos)<<"  "<<temp.substr(equalSignPos+1)<<endl;
 		}
@@ -83,10 +86,11 @@ string LSystem::generateFromFile(const char * filename,const int iterationsOverr
 	float thickness=numbers[2];
 	turtle.thickness=thickness/100;
 	return reproduce(axiom,rules,iterations);
-
 }
-void LSystem::run(const char command,const float param)
+
+void LSystem::run(const char command,const float param, bool drawALeaf)
 {
+    cout << "inside the Lsystem::run function" << endl;
 	float co=defaultCoefficient;
 	float num=param;
 	if (num==1)
@@ -120,10 +124,12 @@ void LSystem::run(const char command,const float param)
 		case 'f':
 			turtle.draw(param);
 		// case 'G':
-		case 'g':
-			turtle.move(param);
+		//case 'g':
+		//	turtle.move(param);
 			break;
 		case '[':
+		    // a new branch is starting
+		    //turtle.move(-1);
 			turtle.save();
 			break;
 		case ']':
@@ -136,48 +142,89 @@ void LSystem::run(const char command,const float param)
 
 
 }
+/*
+* Run is the function which calls the function.
+*/
+
 void LSystem::draw(const string tree)
 {
+    srand(time(NULL));
+    cout << "inside L-system draw" << endl;
 	char paramBuf[1024];
 	int bufIndex=0;
 	string data=tree;
 	float param=0;
 	bool getParam=false,checkParam=false;
 	char command;
-	for (int i=0;i<data.size();++i)
+	int siz = 0 ;
+	vector<int>flag;
+	int max_val = -1;
+	for(int i=0;i<(int)data.size();i++) {
+	    char c=data[i];
+	    max_val = max(max_val, siz);
+	    flag.push_back(siz);
+		if(c == '[') {
+		   siz++;
+		}
+		else if(c == ']') {
+		    siz--;
+		}
+	}
+	/*
+	for(int i=0;i<data.size();i++) {
+	    if(data[i] == ']' && max_val == flag[i])
+	    cout << "Before looping " << data[i] << " " << flag[i] << endl;
+	}
+    */
+	printf("Max value = %d\n",max_val);
+
+	for (int i=0;i<(int)data.size();i++)
 	{
-		char c=data[i];
+	    //char c=data[i];
+        char c=data[i];
 		if (getParam)
 		{
 			if (c==')')
 			{
-				paramBuf[bufIndex]=0;
-				bufIndex=0;
-				param=atof(paramBuf);
-				getParam=false;
-				run(command,param);
+				paramBuf[bufIndex] = 0;
+				bufIndex = 0;
+				param = atof(paramBuf);
+				getParam = false;
+				// cout << command << endl;
+				run(command,param, max_val == flag[i-1]);
 			}
 			else
-				paramBuf[bufIndex++]=c;
+				paramBuf[bufIndex++] = c;
 			continue;
+			//cout << "insided getparam" << endl;
 		}
 		if (checkParam)
 		{
-			checkParam=false;
+			checkParam = false;
 			if (c=='(')
 			{
 				param=0;	
 				getParam=true;
 				continue;
 			}
-			run(command,1);
-
+			//cout << "insided checkparam " << command <<  " " << flag[i] << endl;
+			run(command,1, max_val == flag[i-1]);
 		}
 		command=c;
 		checkParam=true;
 	}
-	if (checkParam)
-		run(command,1);
 
-	cout <<data<<endl;
+	if (checkParam)
+		run(command,1, false);
+
+    //cout << "the generated final rule string is" << endl;
+    //cout << data << endl;
+    /*
+	for(int i=0;i<(int)data.size();i++) {
+	    if (data[i] == 'f' || data[i] == '[' || data[i] == ']' || data[i] == '*') {
+	        cout << data[i] ;
+	    }
+	}
+    */
+	// cout << "\n----------------------------\n";
 }

@@ -107,6 +107,7 @@ R3Shape R3Mesh::Cylinder(float topBottomRatio,int slices)
     cached=true;
   return vertices;
 }
+
 void R3Mesh::AddCoords()
 {
   float width=.05;

@@ -14,7 +14,7 @@ protected:
 	TurtleSystem turtle;
 	void replaceAll(string& str, const string& from, const string& to) ;
     string produce(const string axiom, const AssociativeArray rules);
-	virtual void run(const char command,const float param);
+	virtual void run(const char command,const float param, bool drawALeaf);
 	float defaultCoefficient;
 public:
 	LSystem(R3Mesh *m)
