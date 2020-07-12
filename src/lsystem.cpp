@@ -144,6 +144,7 @@ void LSystem::run(const char command,const float param, bool drawALeaf)
 }
 /*
 * Run is the function which calls the function.
+*I think there is a problem with flag[i-1].So far some-how works.
 */
 
 void LSystem::draw(const string tree)
@@ -161,15 +162,17 @@ void LSystem::draw(const string tree)
 	int max_val = -1;
 	for(int i=0;i<(int)data.size();i++) {
 	    char c=data[i];
-	    max_val = max(max_val, siz);
-	    flag.push_back(siz);
-		if(c == '[') {
+
+	    if(c == '[') {
 		   siz++;
 		}
 		else if(c == ']') {
 		    siz--;
 		}
+		max_val = max(max_val, siz);
+	    flag.push_back(siz);
 	}
+	max_val--;
 	/*
 	for(int i=0;i<data.size();i++) {
 	    if(data[i] == ']' && max_val == flag[i])
@@ -191,7 +194,7 @@ void LSystem::draw(const string tree)
 				param = atof(paramBuf);
 				getParam = false;
 				// cout << command << endl;
-				run(command,param, max_val == flag[i-1]);
+				run(command,param, max_val == flag[i]);
 			}
 			else
 				paramBuf[bufIndex++] = c;
@@ -208,7 +211,7 @@ void LSystem::draw(const string tree)
 				continue;
 			}
 			//cout << "insided checkparam " << command <<  " " << flag[i] << endl;
-			run(command,1, max_val == flag[i-1]);
+			run(command,1, max_val == flag[i]);
 		}
 		command=c;
 		checkParam=true;
