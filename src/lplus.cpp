@@ -7,7 +7,7 @@ LPlusSystem::LPlusSystem(R3Mesh * m)
 :LSystem(m),isPlus(false)
 {
 }
-
+stack<double>branch_heights;
 string LPlusSystem::generateFromFile(const char * filename,const int iterationsOverride )
 {
 	int l=strlen(filename);
@@ -67,34 +67,49 @@ void LPlusSystem::run(const char command,const float param, bool drawALeaf=false
 		turtle.turn180(param);
 		break;
 		case '*':
-		turtle.drawLeaf(1.5);
+
 		break;
 		case 'F':
 		case 'f':
 		//cout << rand_num << endl;
-		rand_num = (double)rand() / RAND_MAX;
-		//rand_num = 1;
+		//rand_num = (double)rand() / RAND_MAX;
+		rand_num = 1;
 		turtle.draw(rand_num);
 		turtle.move(rand_num);
 		// this can be used to change the branch heights...
 		//turtle.draw(1);
 		//turtle.move(1);
-		//case 'G':
-		//case 'g':
-		//cout << param << endl;
-		//turtle.move(1);
+		break;
+		case 'G':
+		case 'g':
+		//cout << num << endl;
+		turtle.move(-0.3);
 		break;
 		case '[':
-			turtle.save();
+		    rand_num = 0.3;
+		  //  turtle.move(-rand_num);
+		    turtle.save();
 			// For branch height
 			//turtle.move(-0.5);
+
+		    //branch_heights.push(rand_num);
+		    //branch_heights.push(rand_num);
+
 			break;
 		case ']':
-		    if (drawALeaf) {
-		        //turtle.move(0.5);
+		    if(drawALeaf){
 		        turtle.drawLeaf(0.3);
 		    }
-			turtle.restore();
+            turtle.restore();
+          //  turtle.move(0.3);
+            //rand_num = 0.3;
+
+
+
+		   // turtle.move(branch_heights.top());
+		//	branch_heights.pop();
+
+
 			break;
 		default:
 		;
