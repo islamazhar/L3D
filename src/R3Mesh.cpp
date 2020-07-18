@@ -153,8 +153,14 @@ Tree(const char * descriptor_filename,const int iterations)
   // return;
 
   LPlusSystem l(this);
-  string lsystem=l.generateFromFile(descriptor_filename,iterations);
-  l.draw(lsystem); 
+  R3Vector origin(10,0,0);
+  string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
+  l.draw(lsystem);
+
+  R3Vector origin2(0,0,0);
+  lsystem=l.generateFromFile(descriptor_filename,iterations, origin2);
+  l.draw(lsystem);
+
   Update();
 
 }

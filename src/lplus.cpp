@@ -8,7 +8,7 @@ LPlusSystem::LPlusSystem(R3Mesh * m)
 {
 }
 stack<double>branch_heights;
-string LPlusSystem::generateFromFile(const char * filename,const int iterationsOverride )
+string LPlusSystem::generateFromFile(const char * filename,const int iterationsOverride, const R3Vector origin)
 {
 	int l=strlen(filename);
 	if (strcmp(filename+l-3,"l++")==0) //this is an l++
@@ -16,11 +16,14 @@ string LPlusSystem::generateFromFile(const char * filename,const int iterationsO
 		isPlus=true;
 	}
 	cout << "calling L-system from LPlus" << endl;
-	return LSystem::generateFromFile(filename,iterationsOverride);
+	return LSystem::generateFromFile(filename,iterationsOverride, origin);
 }
 
 void LPlusSystem::run(const char command,const float param, bool drawALeaf=false)
 {
+
+    cout << turtle.position.X() << " " << \
+    turtle.position.Y() << " " << turtle.position.Z() << endl;
 
     double rand_num;
 	if (!isPlus)

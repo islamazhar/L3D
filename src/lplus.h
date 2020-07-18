@@ -12,6 +12,6 @@ class LPlusSystem: public LSystem
 public:
 	bool isPlus;
 	LPlusSystem(R3Mesh *m);
-	string generateFromFile(const char * filename,const int iterationsOverride );
+	string generateFromFile(const char * filename,const int iterationsOverride, const R3Vector origin);
 	virtual void run(const char command,const float param, bool drawAleaf);
 };

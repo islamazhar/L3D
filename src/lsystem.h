@@ -23,6 +23,6 @@ public:
 
 	}
 	string reproduce(const string axiom,const AssociativeArray rules, const int iterations=1);
-	virtual string generateFromFile(const char * filename, const int iterations=0 );
+	virtual string generateFromFile(const char * filename, const int iterations, const R3Vector origin);
 	void draw(const string data);
 };

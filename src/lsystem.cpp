@@ -36,7 +36,7 @@ string LSystem::reproduce(const string axiom,const AssociativeArray rules, const
 		return reproduce(produce(axiom,rules),rules,iterations-1);
 	return axiom;
 }
-string LSystem::generateFromFile(const char * filename,const int iterationsOverride )
+string LSystem::generateFromFile(const char * filename,const int iterationsOverride, const R3Vector origin)
 {
 	cout <<"Generating L-System data..."<<endl;
 	ifstream file(filename);
@@ -85,11 +85,14 @@ string LSystem::generateFromFile(const char * filename,const int iterationsOverr
 	defaultCoefficient=numbers[1];
 	float thickness=numbers[2];
 	turtle.thickness=thickness/100;
+	turtle.position = origin;
 	return reproduce(axiom,rules,iterations);
 }
 
 void LSystem::run(const char command,const float param, bool drawALeaf)
 {
+    cout << turtle.position.X() << " " << \
+    turtle.position.Y() << " " << turtle.position.Z() << endl;
     cout << "inside the Lsystem::run function" << endl;
 	float co=defaultCoefficient;
 	float num=param;
@@ -149,6 +152,10 @@ void LSystem::run(const char command,const float param, bool drawALeaf)
 
 void LSystem::draw(const string tree)
 {
+
+    cout << turtle.position.X() << " " << \
+    turtle.position.Y() << " " << turtle.position.Z() << endl;
+
     srand(time(NULL));
     cout << "inside L-system draw" << endl;
 	char paramBuf[1024];
