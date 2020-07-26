@@ -45,7 +45,8 @@ static int show_ids = 0;
 static int show_pick = 1;
 static int save_image = 0;
 static int quit = 0;
-
+static double navigation_delta = 0.5;
+static R3Vector navigation_change_look (0.5,0.5,0.5);
 
 
 // GLUT variables 
@@ -220,6 +221,7 @@ void GLUTTexture()
 }
 void GLUTRedraw(void)
 {
+  // cout << "calling Redraw\n";
   // Set projection transformation
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -652,6 +654,7 @@ void GLUTMouse(int button, int state, int x, int y)
 
 void GLUTSpecial(int key, int x, int y)
 {
+
   // Invert y coordinate
   y = GLUTwindow_height - y;
 
@@ -660,6 +663,20 @@ void GLUTSpecial(int key, int x, int y)
     case GLUT_KEY_F1:
     save_image = 1;
     break;
+    case GLUT_KEY_UP:
+        camera_eye  = camera_eye + navigation_delta * camera_towards;
+        break;
+     case GLUT_KEY_DOWN:
+        camera_eye  = camera_eye - navigation_delta * camera_towards;
+        break;
+     case GLUT_KEY_RIGHT:
+        //cout << "pressed right" << endl;
+         //camera_towards[2] = camera_towards[2] + navigation_delta;
+         break;
+     case GLUT_KEY_LEFT:
+         //cout << "pressed left" << endl;
+         //camera_towards[2] = camera_towards[2] - navigation_delta;
+         break;
   }
 
   // Remember mouse position 
@@ -677,6 +694,7 @@ void GLUTSpecial(int key, int x, int y)
 
 void GLUTKeyboard(unsigned char key, int x, int y)
 {
+
   // Invert y coordinate
   y = GLUTwindow_height - y;
 
@@ -809,12 +827,13 @@ void GLUTCreateMenu(void)
 
 void GLUTInit(int *argc, char **argv)
 {
+    cout << "insided GLUTInit\n" ;
   // Open window 
   glutInit(argc, argv);
   glutInitWindowPosition(100, 100);
   glutInitWindowSize(GLUTwindow_width, GLUTwindow_height);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH); // | GLUT_STENCIL
-  GLUTwindow = glutCreateWindow("OpenGL Viewer");
+  GLUTwindow = glutCreateWindow("Bio-sonar Simulator");
 
   // Initialize GLUT callback functions 
   glutReshapeFunc(GLUTResize);
