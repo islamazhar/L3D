@@ -23,15 +23,15 @@ R3Shape R3Mesh::Leaf(const R3Vector direction)
 {
   float z;
   z=direction.Dot(R3Vector(0,1,0))/4.0; //bend towards earth
-  
+
   if (z==0) z=(rand()%20 -10 ) /100.0; //some random bend if non
 
   vector<R3MeshVertex *> face;
-  face.push_back(CreateVertex(R3Point(0,.01,0)  ,R2Point(.5,.01) )); 
+  face.push_back(CreateVertex(R3Point(0,.01,0)  ,R2Point(.5,.01) ));
   face.push_back(CreateVertex(R3Point(.2,.1,0)  ,R2Point(.7,.1) ));
   face.push_back(CreateVertex(R3Point(.25,.3,0) ,R2Point(.75,.3) ));
   face.push_back(CreateVertex(R3Point(.2,.6,z/2) ,R2Point(.7,.6) ));
-  
+
 
   face.push_back(CreateVertex(R3Point(0,1-z,z) ,R2Point(.5,1) ));
   face.push_back(CreateVertex(R3Point(-.2,.6,z/2) ,R2Point(.3,.6) ));
@@ -44,7 +44,7 @@ R3Shape R3Mesh::Leaf(const R3Vector direction)
 R3Shape R3Mesh::Circle(float radius,int slices)
 {
   vector<R3MeshVertex *> face_vertices;
-  for(int i=0; i<slices; i++) 
+  for(int i=0; i<slices; i++)
   {
     R3MeshVertex*t;
     float theta = ((float)i)* (2.0*M_PI/slices);
@@ -68,7 +68,7 @@ R3Shape R3Mesh::Cylinder(float topBottomRatio,int slices)
   R3Shape bottom_circle;
   R3Shape top_circle;
   R3Shape side;
-  for(int i=0; i<slices; i++) 
+  for(int i=0; i<slices; i++)
   {
     R3MeshVertex*t1,*t2;
     R3Point p;
@@ -161,11 +161,11 @@ Tree(const char * descriptor_filename,const int iterations)
         cout << "Can not open tree location files\n";
         exit(1);
   }
-  double x,y;
+  double x,z;
 
   while(!tree_location_file.eof()){
-    tree_location_file >> x >> y;
-    R3Vector origin(x,y,0);
+    tree_location_file >> x >> z;
+    R3Vector origin(x,0,z);
     string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
     l.draw(lsystem);
   }
@@ -279,11 +279,11 @@ Translate(double dx, double dy, double dz)
 void R3Mesh::
 ScaleShape(vector<R3MeshVertex *> shape,double sx, double sy, double sz)
 {
-  // Scale the mesh by increasing the distance 
-  // from every vertex to the origin by a factor 
+  // Scale the mesh by increasing the distance
+  // from every vertex to the origin by a factor
   // given for each dimension (sx, sy, sz)
 
-  // This is implemented for you as an example 
+  // This is implemented for you as an example
 
   // Update vertices
   for (unsigned int i = 0; i < shape.size(); i++) {
@@ -316,10 +316,10 @@ RotateShape(vector<R3MeshVertex *> shape,double angle, const R3Vector& axis)
 void R3Mesh::
 RotateShape(vector<R3MeshVertex *> shape,double angle, const R3Line& axis)
 {
-  // Rotate the mesh counter-clockwise by an angle 
+  // Rotate the mesh counter-clockwise by an angle
   // (in radians) around a line axis
 
-  // This is implemented for you as an example 
+  // This is implemented for you as an example
 
   // Update vertices
   for (unsigned int i = 0; i < shape.size(); i++) {
@@ -501,19 +501,19 @@ Read(const char *filename)
 
   // Read file of appropriate type
   int status = 0;
-  if (!strncmp(extension, ".ray", 4)) 
+  if (!strncmp(extension, ".ray", 4))
     status = ReadRay(filename);
-  else if (!strncmp(extension, ".off+", 5)) 
+  else if (!strncmp(extension, ".off+", 5))
     status = ReadOff(filename,true);
-  else if (!strncmp(extension, ".off", 4)) 
+  else if (!strncmp(extension, ".off", 4))
     status = ReadOff(filename);
-  else if (!strncmp(extension, ".jpg", 4)) 
+  else if (!strncmp(extension, ".jpg", 4))
     status = ReadImage(filename);
-  else if (!strncmp(extension, ".jpeg", 4)) 
+  else if (!strncmp(extension, ".jpeg", 4))
     status = ReadImage(filename);
-  else if (!strncmp(extension, ".bmp", 4)) 
+  else if (!strncmp(extension, ".bmp", 4))
     status = ReadImage(filename);
-  else if (!strncmp(extension, ".ppm", 4)) 
+  else if (!strncmp(extension, ".ppm", 4))
     status = ReadImage(filename);
   else {
     fprintf(stderr, "Unable to read file %s (unrecognized extension: %s)\n", filename, extension);
@@ -540,11 +540,11 @@ Write(const char *filename)
   }
 
   // Write file of appropriate type
-  if (!strncmp(extension, ".ray", 4)) 
+  if (!strncmp(extension, ".ray", 4))
     return WriteRay(filename);
-  else if (!strncmp(extension, ".off+", 5)) 
+  else if (!strncmp(extension, ".off+", 5))
     return WriteOffPlus(filename);
-  else if (!strncmp(extension, ".off", 4)) 
+  else if (!strncmp(extension, ".off", 4))
     return WriteOff(filename);
   else {
     fprintf(stderr, "Unable to write file %s (unrecognized extension: %s)", filename, extension);
@@ -561,10 +561,10 @@ Write(const char *filename)
 int R3Mesh::
 ReadImage(const char *filename)
 {
-  // Create a mesh by reading an image file, 
-  // constructing vertices at (x,y,luminance), 
-  // and connecting adjacent pixels into faces. 
-  // That is, the image is interpretted as a height field, 
+  // Create a mesh by reading an image file,
+  // constructing vertices at (x,y,luminance),
+  // and connecting adjacent pixels into faces.
+  // That is, the image is interpretted as a height field,
   // where the luminance of each pixel provides its z-coordinate.
 
   // Read image
@@ -673,7 +673,7 @@ ReadOff(const char *filename,int plus)
         return 0;
       }
       //<ABIUSX
-      R2Point point=R2zero_point; 
+      R2Point point=R2zero_point;
       if (plus)
       {
         float px,py;
@@ -688,7 +688,7 @@ ReadOff(const char *filename,int plus)
       vertex_count++;
     }
     else if (face_count < nfaces) {
-      // Read number of vertices in face 
+      // Read number of vertices in face
       int face_nverts = 0;
       bufferp = strtok(bufferp, " \t");
       if (bufferp) face_nverts = atoi(bufferp);
@@ -735,13 +735,13 @@ ReadOff(const char *filename,int plus)
 
   // Check whether read all vertices
   if ((vertex_count != nverts) || (NVertices() < nverts)) {
-    fprintf(stderr, "Expected %d vertices, but read %d vertex lines and created %d vertices in file %s\n", 
+    fprintf(stderr, "Expected %d vertices, but read %d vertex lines and created %d vertices in file %s\n",
       nverts, vertex_count, NVertices(), filename);
   }
 
   // Check whether read all faces
   if ((face_count != nfaces) || (NFaces() < nfaces)) {
-    fprintf(stderr, "Expected %d faces, but read %d face lines and created %d faces in file %s\n", 
+    fprintf(stderr, "Expected %d faces, but read %d face lines and created %d faces in file %s\n",
       nfaces, face_count, NFaces(), filename);
   }
 
@@ -927,7 +927,7 @@ WriteRay(const char *filename)
     const R3Point& p = vertex->position;
     const R3Vector& n = vertex->normal;
     const R2Point& t = vertex->texcoords;
-    fprintf(fp, "#vertex %g %g %g  %g %g %g  %g %g\n", p.X(), p.Y(), p.Z(), 
+    fprintf(fp, "#vertex %g %g %g  %g %g %g  %g %g\n", p.X(), p.Y(), p.Z(),
       n.X(), n.Y(), n.Z(), t.X(), t.Y());
     vertex->id = i;
   }
@@ -984,7 +984,7 @@ id(0)
 
 R3MeshVertex::
 R3MeshVertex(const R3Point& position, const R3Vector& normal, const R2Point& texcoords)
-: position(position),                    
+: position(position),
 normal(normal),
 texcoords(texcoords),
 curvature(0),
@@ -1019,9 +1019,9 @@ UpdateNormal(void)
   // second.  To do it, you must design a data structure that allows O(K)
   // access to faces attached to each vertex, where K is the number of faces attached
   // to the vertex.  Then, to compute the normal for a vertex,
-  // you should take a weighted average of the normals for the attached faces, 
+  // you should take a weighted average of the normals for the attached faces,
   // where the weights are determined by the areas of the faces.
-  // Store the resulting normal in the "normal"  variable associated with the vertex. 
+  // Store the resulting normal in the "normal"  variable associated with the vertex.
   // You can display the computed normals by hitting the 'N' key in meshview.
 
   // FILL IN IMPLEMENTATION HERE (THIS IS REQUIRED)
@@ -1034,9 +1034,9 @@ UpdateNormal(void)
 void R3MeshVertex::
 UpdateCurvature(void)
 {
-  // Compute an estimate of the Gauss curvature of the surface 
-  // using a method based on the Gauss Bonet Theorem, which is described in 
-  // [Akleman, 2006]. Store the result in the "curvature"  variable. 
+  // Compute an estimate of the Gauss curvature of the surface
+  // using a method based on the Gauss Bonet Theorem, which is described in
+  // [Akleman, 2006]. Store the result in the "curvature"  variable.
 
   // FILL IN IMPLEMENTATION HERE
   // fprintf(stderr, "Update vertex curvature not implemented\n");
@@ -1132,17 +1132,17 @@ UpdatePlane(void)
 {
   // Check number of vertices
   int nvertices = vertices.size();
-  if (nvertices < 3) { 
-    plane = R3null_plane; 
-    return; 
+  if (nvertices < 3) {
+    plane = R3null_plane;
+    return;
   }
 
   // Compute centroid
   R3Point centroid = R3zero_point;
-  for (int i = 0; i < nvertices; i++) 
+  for (int i = 0; i < nvertices; i++)
     centroid += vertices[i]->position;
   centroid /= nvertices;
-  
+
   // Compute best normal for counter-clockwise array of vertices using newell's method
   R3Vector normal = R3zero_vector;
   const R3Point *p1 = &(vertices[nvertices-1]->position);
@@ -1153,13 +1153,12 @@ UpdatePlane(void)
     normal[2] += (p1->X() - p2->X()) * (p1->Y() + p2->Y());
     p1 = p2;
   }
-  
+
   // Normalize normal vector
   normal.Normalize();
-  
+
   // Update face plane
   plane.Reset(centroid, normal);
 }
-
 
 

@@ -21,10 +21,10 @@ string LPlusSystem::generateFromFile(const char * filename,const int iterationsO
 
 void LPlusSystem::run(const char command,const float param, bool drawALeaf=false)
 {
-
+    /*
     cout << turtle.position.X() << " " << \
     turtle.position.Y() << " " << turtle.position.Z() << endl;
-
+    */
     double rand_num;
 	if (!isPlus)
 		return LSystem::run(command,param, drawALeaf);
