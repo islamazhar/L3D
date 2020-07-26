@@ -46,8 +46,6 @@ static int show_pick = 1;
 static int save_image = 0;
 static int quit = 0;
 static double navigation_delta = 0.5;
-static R3Vector navigation_change_look (0.5,0.5,0.5);
-
 
 // GLUT variables 
 
@@ -57,7 +55,7 @@ static int GLUTwindow_width = 800;
 static int GLUTmouse[2] = { 0, 0 };
 static int GLUTbutton[3] = { 0, 0, 0 };
 static int GLUTmodifiers = 0;
-
+static int drawaxes = 1;
 
 
 // GLUT command list
@@ -219,8 +217,28 @@ void GLUTTexture()
   leaf=LoadTexture("textures/leaf.bmp",512,512);
 
 }
+void GlutDrawAxes(){
+
+	if(drawaxes==1){
+	    //cout << "Drawing axis\n";
+		glColor3f(0, 0, 1);
+		glLineWidth(2);
+		glBegin(GL_LINES);{
+			glVertex3f(50,0,0);
+			glVertex3f(-50,0,0);
+
+			glVertex3f(0,-50,0);
+			glVertex3f(0, 50,0);
+
+			glVertex3f(0,0, 50);
+			glVertex3f(0,0,-50);
+		}glEnd();
+	}
+}
+
 void GLUTRedraw(void)
 {
+
   // cout << "calling Redraw\n";
   // Set projection transformation
   glMatrixMode(GL_PROJECTION);
@@ -441,7 +459,8 @@ void GLUTRedraw(void)
     if (output_mesh_name) mesh->Write(output_mesh_name);
     GLUTStop();
   }
-
+  // drawing axis
+    GlutDrawAxes();
   // Swap buffers 
   glutSwapBuffers();
 }    
