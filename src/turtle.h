@@ -5,14 +5,16 @@
 #include "R3/R3.h"
 #include "R3Mesh.h"
 using namespace std;
-struct Turtle 
+class Turtle
 {
+public:
   R3Vector position;
   R3Vector direction;
   R3Vector right;
   float thickness;
   float reduction;
   Turtle();
+  ~Turtle();
   void turnRight(float angle);
   void turnLeft(float angle);
   void pitchDown(float angle);
@@ -25,6 +27,7 @@ struct Turtle
   void narrow(float param);
   void setThickness(float param);
   void setReduction(float param);
+  FILE *fp = NULL;
 
 
 };

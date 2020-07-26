@@ -8,8 +8,13 @@ Turtle::Turtle()
 ,reduction(.95)
 
 {
+    this->fp = fopen("leaf.txt", "w");
 
 }
+Turtle::~Turtle() {
+    //fclose(this->fp);
+}
+
 void Turtle::setReduction(float param)
 {
   reduction=param/100;
@@ -117,6 +122,9 @@ void TurtleSystem::drawLeaf(float param)
       mesh->RotateShape(s,rotateAngle,axis);
   }
   mesh->TranslateShape(s,position.X(),position.Y(),position.Z());
+  position.Print(this->fp);
+  direction.Print(this->fp);
+  fprintf(fp,"\n");
 }
 
 void TurtleSystem::draw(float param)
