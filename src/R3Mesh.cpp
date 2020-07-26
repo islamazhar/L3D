@@ -6,7 +6,8 @@
 
 #include "R3Mesh.h"
 #include "lplus.h"
-
+#include <bits/stdc++.h>
+using namespace std;
 void R3Mesh::
 Twist(double angle)
 {
@@ -153,16 +154,24 @@ Tree(const char * descriptor_filename,const int iterations)
   // return;
 
   LPlusSystem l(this);
-  R3Vector origin(10,0,0);
-  string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
-  l.draw(lsystem);
+  // read the tree locations
 
-  R3Vector origin2(0,0,0);
-  lsystem=l.generateFromFile(descriptor_filename,iterations, origin2);
-  l.draw(lsystem);
+  ifstream tree_location_file("test.csv");
+  if(!tree_location_file) {
+        cout << "Can not open tree location files\n";
+        exit(1);
+  }
+  double x,y;
+
+  while(!tree_location_file.eof()){
+    tree_location_file >> x >> y;
+    R3Vector origin(x,y,0);
+    string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
+    l.draw(lsystem);
+  }
+
 
   Update();
-
 }
 ////////////////////////////////////////////////////////////
 // MESH CONSTRUCTORS/DESTRUCTORS
