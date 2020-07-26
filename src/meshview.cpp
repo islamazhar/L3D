@@ -46,6 +46,7 @@ static int show_pick = 1;
 static int save_image = 0;
 static int quit = 0;
 static double navigation_delta = 0.5;
+static R3Vector r(- 1.00/sqrt(2), 1.00/sqrt(2), 0) ;
 
 // GLUT variables 
 
@@ -690,9 +691,10 @@ void GLUTSpecial(int key, int x, int y)
         break;
      case GLUT_KEY_RIGHT:
         //cout << "pressed right" << endl;
-         //camera_towards[2] = camera_towards[2] + navigation_delta;
+         camera_towards = camera_towards + r * navigation_delta;
          break;
      case GLUT_KEY_LEFT:
+        camera_towards = camera_towards - r * navigation_delta;
          //cout << "pressed left" << endl;
          //camera_towards[2] = camera_towards[2] - navigation_delta;
          break;
