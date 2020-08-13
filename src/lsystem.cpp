@@ -15,6 +15,10 @@ void LSystem::replaceAll(string& str, const string& from, const string& to)
 		str.replace(start_pos, from.length(), to);
     	start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
+    FILE *fp = fopen("string.txt", "w");
+    fprintf(fp, "%s\n",str.c_str());
+    //cout << str << endl;
+    fclose(fp);
 }
 string LSystem::produce(const string axiom, const AssociativeArray rules)
 {

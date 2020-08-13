@@ -21,10 +21,18 @@ F=F[-&<F][<++&F]|F[-&>F][+&F] #a rule, this is recursively applied to the axiom 
 @ #end of L file
 
 
-The R3Mesh class is responsible for generating this tree using LSystem and Turtle, and saving it to an Off or Off+ file. There is a Cylinder function in the R3Mesh class, which creates a Cylinder and returns its vertices. The cylinder is towards Y axis, with radius and length of 1. This cylinder is the building block of all trees. There is also a Leaf function which generates a leaf, for L++ trees.
+The R3Mesh class is responsible for generating this tree using LSystem and Turtle,
+and saving it to an Off or Off+ file.
+There is a Cylinder function in the R3Mesh class,
+which creates a Cylinder and returns its vertices.
+The cylinder is towards Y axis, with radius and length of 1.
+This cylinder is the building block of all trees. There is also a Leaf function which generates a leaf, for L++ trees.
 
 
-L and L3D files typically work with an OFF file for input/output. Off file is a textual format containing vertices and faces. On the other hand, L++ files work on Off+ files, which on top of everything that Off has, contain texture coordinates for vertices, and a flag telling if a face is a leaf or not.
+L and L3D files typically work with an OFF file for input/output.
+Off file is a textual format containing vertices and faces.
+On the other hand, L++ files work on Off+ files, which on top of everything that Off has, contain texture coordinates for vertices,
+and a flag telling if a face is a leaf or not.
 
 Instructions for L (or L3D) files are as follows (for generation of rules):
 + = turn right

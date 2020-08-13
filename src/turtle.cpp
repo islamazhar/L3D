@@ -9,7 +9,6 @@ Turtle::Turtle()
 
 {
     this->fp = fopen("leaf.txt", "w");
-
 }
 Turtle::~Turtle() {
     //fclose(this->fp);
@@ -105,15 +104,14 @@ void TurtleSystem::restore()
   reduction=t.reduction;
   // (Turtle)*this=t; //FIXME: doesn't work, figure out why!
 }
-// Draw a leaf
 void TurtleSystem::drawLeaf(float param)
 {
 
-  R3Shape s=mesh->Leaf(direction);
+    R3Shape s=mesh->Leaf(direction); // this creates a face for the leaf
 
   mesh->ScaleShape(s,param,param,param);
   R3Vector leafDirection(0,1,0);
-  R3Vector axis=leafDirection %  direction; 
+  R3Vector axis=leafDirection %  direction;
   axis.Normalize();
   if (!(fabs(axis.X())<.001 && fabs(axis.Y())<.001 && fabs(axis.Z())<.001) )
   {
@@ -125,11 +123,27 @@ void TurtleSystem::drawLeaf(float param)
   position.Print(this->fp);
   direction.Print(this->fp);
   fprintf(fp,"\n");
-}
 
+    /*
+    // isLeaf pos X pos Y pos Z
+    fprintf(fp, "1 %lf %lf %lf ", position.X(), position.Y(), position.Z());
+    // direction X, direction Y, direction Z
+    fprintf(fp, "%lf %lf %lf ", direction.X(), direction.Y(), direction.Z());
+    // param, thickness, reduction
+    fprintf(fp, "%lf %lf %lf\n",param, thickness, reduction);
+    */
+}
 void TurtleSystem::draw(float param)
 {
-  static int num=0;
+    /*
+    // isLeaf pos X pos Y pos Z
+    fprintf(fp, "0 %lf %lf %lf ", position.X(), position.Y(), position.Z());
+    // direction X, direction Y, direction Z
+    fprintf(fp, "%lf %lf %lf ", direction.X(), direction.Y(), direction.Z());
+    // param, thickness, reduction
+    fprintf(fp, "%lf %lf %lf\n",param, thickness, reduction);
+    */
+    static int num=0;
   if (num++ % 1000 ==0) cout <<num<<" drawing"<<endl;
 
   int slices;

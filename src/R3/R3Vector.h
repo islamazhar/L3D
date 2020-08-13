@@ -74,7 +74,7 @@ class R3Vector {
   void Draw(void) const;
   void Print(FILE *fp = stdout) const;
 
- private:
+ public:
   double v[3];
 };
 
@@ -279,6 +279,3 @@ Reset(double x, double y, double z)
   v[1] = y;
   v[2] = z;
 }
-
-
-

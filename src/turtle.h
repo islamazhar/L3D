@@ -33,9 +33,9 @@ public:
 };
 class TurtleSystem: public Turtle 
 {
+public:
   stack<Turtle> state;
   R3Mesh *mesh;
-public:
   TurtleSystem(R3Mesh * m);
   void save();
   void restore();

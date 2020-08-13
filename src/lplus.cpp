@@ -70,7 +70,7 @@ void LPlusSystem::run(const char command,const float param, bool drawALeaf=false
 		turtle.turn180(param);
 		break;
 		case '*':
-
+        turtle.drawLeaf(0.3);
 		break;
 		case 'F':
 		case 'f':

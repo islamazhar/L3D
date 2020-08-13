@@ -19,6 +19,7 @@ Twist(double angle)
   // Update mesh data structures
   Update();
 }
+// This is important
 R3Shape R3Mesh::Leaf(const R3Vector direction)
 {
   float z;
@@ -39,8 +40,8 @@ R3Shape R3Mesh::Leaf(const R3Vector direction)
   face.push_back(CreateVertex(R3Point(-.2,.1,0) ,R2Point(.3,.1) ));
   CreateFace(face)->isLeaf=true;
   return face;
-
 }
+
 R3Shape R3Mesh::Circle(float radius,int slices)
 {
   vector<R3MeshVertex *> face_vertices;
@@ -48,15 +49,16 @@ R3Shape R3Mesh::Circle(float radius,int slices)
   {
     R3MeshVertex*t;
     float theta = ((float)i)* (2.0*M_PI/slices);
-    t=CreateVertex(R3Point(radius*cos(theta), 0, radius*sin(theta))); //vertices at edges of circle
+    t = CreateVertex(R3Point(radius*cos(theta), 0, radius*sin(theta))); //vertices at edges of circle
     face_vertices.push_back(t);
   }
   CreateFace(face_vertices);
   return face_vertices;
-
 }
+
 R3Shape R3Mesh::Cylinder(float topBottomRatio,int slices)
 {
+
   static bool cached=false;
   cached=false;
   static vector<R3Point> cache;
@@ -169,8 +171,6 @@ Tree(const char * descriptor_filename,const int iterations)
     string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
     l.draw(lsystem);
   }
-
-
   Update();
 }
 ////////////////////////////////////////////////////////////
@@ -377,7 +377,7 @@ CreateFace(const vector<R3MeshVertex *>& vertices)
   // Add to list
   faces.push_back(face);
 
-  // Return face
+  // ReturnR3MeshVertex face
   return face;
 }
 
@@ -624,7 +624,25 @@ ReadOff(const char *filename,int plus)
     return 0;
   }
 
+  // reading the filtered leaves from exp.txt file
+
+  vector<int>filter_leaves;
+  int num;
+  FILE *filtered_leaves_file = fopen("exp.txt", "r");
+  if (!filtered_leaves_file) {
+      cout << " No filtered leaves files.. continuing without filtering\n";
+  }
+  else {
+      while (fscanf(filtered_leaves_file, " %d ", &num) != EOF) {
+          filter_leaves.push_back(num);
+          // cout << num << "\t";
+      }
+      fclose(filtered_leaves_file);
+      cout << "Done with reading filtered leaves\n";
+  }
+
   // Read file
+  int leaf_count = 1;
   int nverts = 0;
   int nfaces = 0;
   int nedges = 0;
@@ -633,6 +651,7 @@ ReadOff(const char *filename,int plus)
   int face_count = 0;
   char buffer[1024];
   char header[64];
+  int current_leaf_index = 0;
   while (fgets(buffer, 1023, fp)) {
     // Increment line counter
     line_count++;
@@ -719,7 +738,29 @@ ReadOff(const char *filename,int plus)
       if (plus)
       {
         bufferp=strtok(NULL, " \t");
-        CreateFace(face_vertices)->isLeaf=atoi(bufferp);
+        int isLeaf = atoi(bufferp);
+        if(isLeaf) {
+
+            if (filter_leaves[current_leaf_index] == leaf_count)
+            {
+                CreateFace(face_vertices)->isLeaf = 1;
+                if(current_leaf_index < (int) filter_leaves.size()) {
+                    current_leaf_index++;
+                }
+               // cout << "yay!\n";
+            }
+            else
+            {
+            	CreateFace(face_vertices)->isLeaf = 2;
+                // leaf is not in the beam
+                // do not show this leaf
+            }
+            leaf_count++;
+        }
+        else {
+            // This is a branch
+            CreateFace(face_vertices)->isLeaf = 0;
+        }
       }
       //>ABIUSX
 
@@ -748,7 +789,33 @@ ReadOff(const char *filename,int plus)
   // Close file
   fclose(fp);
 
+  cout << "Returing from ReadOff\n";
+
+  printf("%d\n", leaf_count);
   // Return number of faces read
+
+  // read the water_beam sphere from sonar_beam.txt file
+  //cout << "Before reading sonar file\n";
+    FILE *sonar_beam = fopen("sonar_beam.txt", "r");
+    if(!sonar_beam) {
+        cout << " can not open the water-drop sonar_beam file\n";
+    }
+    else {
+     //   double x = 0;
+     //   double y = 0;
+     //   double z = 0;
+        double xx, yy, zz;
+        R2Point point = R2Point(1,0);
+        while (fscanf(sonar_beam, "%lf,%lf,%lf", &xx,&yy,&zz) == 3) {
+                R3MeshVertex *vertex = new R3MeshVertex(R3Point(xx, yy, zz), R3zero_vector , point);
+                sonar_beam_vertices.push_back(vertex);
+              //  cout << vertex_count << endl;
+        }
+    }
+    fclose(sonar_beam);
+    //cout << "Done with reading sonar file\n";
+
+
   return NFaces();
 }
 
@@ -1005,8 +1072,8 @@ AverageEdgeLength(void) const
 
   // FILL IN IMPLEMENTATION HERE  (THIS IS REQUIRED)
   // BY REPLACING THIS ARBITRARY RETURN VALUE
-  fprintf(stderr, "Average vertex edge length not implemented\n");
-  return 0.12345;
+  //fprintf(stderr, "Average vertex edge length not implemented\n");
+  return 1;
 }
 
 

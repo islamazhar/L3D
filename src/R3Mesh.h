@@ -65,9 +65,10 @@ struct R3MeshFace {
 
   // Data
   vector<R3MeshVertex *> vertices;
+
   R3Plane plane;
   int id;
-  bool isLeaf;
+  int isLeaf;
 };
 ///ABIUSX
 typedef pair<R3MeshVertex*,R3MeshVertex*> R3MeshEdge;
@@ -140,6 +141,7 @@ struct R3Mesh {
   // Data
   vector<R3MeshVertex *> vertices;
   vector<R3MeshFace *> faces;
+  vector<R3MeshVertex *> sonar_beam_vertices;
   R3Box bbox;
 };
 

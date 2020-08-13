@@ -72,7 +72,7 @@ main(int argc, char **argv)
   // }
 
   mesh->Tree(tree_file_name,iterations);
-  // Write output mesh
+  //cout << " Write output mesh " << endl;
   if (!mesh->Write(output_mesh_name)) {
     fprintf(stderr, "Unable to write mesh to %s\n", output_mesh_name);
     exit(-1);

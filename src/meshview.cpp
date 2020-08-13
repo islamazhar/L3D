@@ -37,16 +37,18 @@ static R3Point pick_position = R3zero_point;
 static bool pick_active = false;
 static int show_faces = 1;
 static int show_edges = 0;
+static int show_sonar = 1;
 static int show_vertices = 0;
 static int show_normals = 0;
 static int show_curvatures = 0;
 static int show_bbox = 0;
 static int show_ids = 0;
-static int show_pick = 1;
+static int show_pick = 0;
 static int save_image = 0;
 static int quit = 0;
 static double navigation_delta = 0.5;
-static R3Vector r(- 1.00/sqrt(2), 1.00/sqrt(2), 0) ;
+static R3Vector r(-1.00/sqrt(2), 1.00/sqrt(2), 0) ;
+static R3Vector l(-1.00/sqrt(2), -1.00/sqrt(2), 0) ;
 
 // GLUT variables 
 
@@ -206,7 +208,7 @@ GLuint LoadTexture( const char * filename ,int width,int height)
 
  return texture;
 }
-GLuint tree,leaf;
+GLuint tree,leaf, filteredLeaf;
 void GLUTTexture()
 {
 
@@ -216,6 +218,7 @@ void GLUTTexture()
 
   tree=LoadTexture("textures/lightwood.bmp",512,512);
   leaf=LoadTexture("textures/leaf.bmp",512,512);
+  filteredLeaf = LoadTexture("textures/filtered_leaf.bmp",512,512);
 
 }
 void GlutDrawAxes(){
@@ -283,10 +286,18 @@ void GLUTRedraw(void)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess); 
     for (int i = 0; i < mesh->NFaces(); i++) {
       R3MeshFace *face = mesh->Face(i);
-      if (face->isLeaf) //ABIUSX
-        glBindTexture(GL_TEXTURE_2D, leaf); //ABIUSX
-      else //ABIUSX
-        glBindTexture(GL_TEXTURE_2D, tree); //ABIUSX
+      if (face->isLeaf == 1) {
+          // in the beam
+          glBindTexture(GL_TEXTURE_2D, leaf);
+      }
+      else if (face->isLeaf == 2) {
+          // not in the beam
+          glBindTexture(GL_TEXTURE_2D, filteredLeaf);
+      }
+      else {
+          // this is a branch
+          glBindTexture(GL_TEXTURE_2D, tree); //ABIUSX
+      }
       glBegin(GL_POLYGON);
 
       const R3Vector& normal = face->plane.Normal();
@@ -321,12 +332,14 @@ void GLUTRedraw(void)
   }
 
   // Draw vertices
+  //cout << "show vertices " << show_vertices << endl;
   if (show_vertices) {
     glDisable(GL_LIGHTING);
     glColor3d(0, 0, 0);
     glPointSize(5);
     glBegin(GL_POINTS);
     for (int i = 0; i < mesh->NVertices(); i++) {
+    //    cout << "Showing vertices \n";
       R3MeshVertex *vertex = mesh->Vertex(i);
       const R3Point& p = vertex->position;
       glVertex3f(p[0], p[1], p[2]);
@@ -345,6 +358,27 @@ void GLUTRedraw(void)
       GLUTDrawText(vertex->position, buffer);
     }
   }
+
+  if(show_sonar) {
+      int sonar_beam_siz = mesh->sonar_beam_vertices.size();
+     // cout << " Showing sonar  " << sonar_beam_siz <<"\n";
+      glDisable(GL_LIGHTING);
+      glColor3d(0, 1, 0);
+      glPointSize(0.5);
+      glBegin(GL_POINTS);
+      for (int i = 0; i < sonar_beam_siz; i++) {
+          R3MeshVertex *vertex = mesh->sonar_beam_vertices[i];
+         /// double length = vertex->AverageEdgeLength();
+          const R3Point& p = vertex->position;
+        //  R3Vector v = length * vertex->normal;
+        //  cout << length << endl;
+          //cout << p[0] << " " << p[1] << " " <<p[2] << endl;
+          glVertex3f(p[0], p[1], p[2]);
+        //  glVertex3f(p[0] + v[0], p[1] + v[1], p[2] + v[2]);
+      }
+      glEnd();
+  }
+
 
   // Draw normals
   if (show_normals) {
@@ -594,7 +628,8 @@ void GLUTMotion(int x, int y)
   if ((dx != 0) || (dy != 0)) {
     R3Point mesh_center = mesh->Center();
     if ((GLUTbutton[0] && (GLUTmodifiers & GLUT_ACTIVE_SHIFT)) || GLUTbutton[1]) {
-      // Scale world 
+      // Scale world
+      //cout << "Scaling world\n";
       double factor = (double) dx / (double) GLUTwindow_width;
       factor += (double) dy / (double) GLUTwindow_height;
       factor = exp(2.0 * factor);
@@ -605,6 +640,7 @@ void GLUTMotion(int x, int y)
     }
     else if (GLUTbutton[0] && (GLUTmodifiers & GLUT_ACTIVE_CTRL)) {
       // Translate world
+      //cout << "Translating world\n";
       double length = R3Distance(mesh_center, camera_eye) * tan(camera_yfov);
       double vx = length * (double) dx / (double) GLUTwindow_width;
       double vy = length * (double) dy / (double) GLUTwindow_height;
@@ -615,6 +651,7 @@ void GLUTMotion(int x, int y)
     }
     else if (GLUTbutton[0]) {
       // Rotate world
+      //cout << "Rotating world\n";
       double vx = (double) dx / (double) GLUTwindow_width;
       double vy = (double) dy / (double) GLUTwindow_height;
       double theta = 4.0 * (fabs(vx) + fabs(vy));
@@ -694,11 +731,11 @@ void GLUTSpecial(int key, int x, int y)
          camera_towards = camera_towards + r * navigation_delta;
          break;
      case GLUT_KEY_LEFT:
-        camera_towards = camera_towards - r * navigation_delta;
-         //cout << "pressed left" << endl;
-         //camera_towards[2] = camera_towards[2] - navigation_delta;
+         camera_towards = camera_towards - r * navigation_delta;
          break;
   }
+
+
 
   // Remember mouse position 
   GLUTmouse[0] = x;
@@ -775,6 +812,10 @@ void GLUTKeyboard(unsigned char key, int x, int y)
 
   case 27: // ESCAPE
   quit = 1;
+  break;
+  case 's':
+  case 'S':
+  save_image = 1;
   break;
 }
 
@@ -972,12 +1013,3 @@ int main(int argc, char **argv)
   // Return success 
   return 0;
 }
-
-
-
-
-
-
-
-
-
