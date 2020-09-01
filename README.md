@@ -20,18 +20,19 @@ Turtle implements a turtle graphics system, which is a graphics model where you 
 
 LSystem class implements an L-System, which is a set of rules generating a huge string of steps for the turtle, to draw a tree. L-System generates those strings from .l or .l3d or .l++ files and then feeds them to turtle to consume. The extended LSystem which is called LPlusSystem has a better parser which features many more commands and stockastic control over the rules.
 
-Rule files:
+Rule files formate:
 -------------------------------------------------------------------------------
 A sample L (or L3D, they are the same) file is as follows:
-#this is a comment line
-3 #the number of recursions for generating rules from the axiom
-12 #default number for rotations, turns, and etc.
-5 #thickness of branches compared to their length in percent
-F #the axiom, a tree starts with this
-F=F[-&<F][<++&F]|F[-&>F][+&F] #a rule, this is recursively applied to the axiom to generate the tree string
+- #this is a comment line
+- 3 #the number of recursions for generating rules from the axiom
+- 12 #default number for rotations, turns, and etc.
+- 5 #thickness of branches compared to their length in percent
+- F #the axiom, a tree starts with this
+- F=F[-&<F][<++&F]|F[-&>F][+&F] #a rule, this is recursively applied to the axiom to generate the tree string
+- @ #end of L file
 
 we can have multiple rules, all of them are evaluated in each recursion iteration
-@ #end of L file
+
 
 
 The R3Mesh class is responsible for generating this tree using LSystem and Turtle,
