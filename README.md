@@ -49,29 +49,29 @@ On the other hand, L++ files work on Off+ files, which on top of everything that
 and a flag telling if a face is a leaf or not.
 
 Instructions for L (or L3D) files are as follows (for generation of rules):
-+ = turn right
-- = turn left
-& = pitch down
-^ = pitch up
-< or \ = roll left
-> or / = roll right
-| = turn 180 degree
-f or F = draw branch (and go forward)
-g = go forward
-[ = save state
-] = restore state
+- + = turn right
+- - = turn left
+- & = pitch down
+- ^ = pitch up
+- < or \ = roll left
+- > or / = roll right
+- | = turn 180 degree
+- f or F = draw branch (and go forward)
+- g = go forward
+- [ = save state
+- ] = restore state
 
 Any of those that require a number, work on the default number by default. You can provide another number by providing it in paranthesis, for example:
 
 +(90)&(75.5)
 
 The L++ format is slightly different, in the following ways:
-> and < are not rolling
-> : decrease thickness (by percent of its own)
-< : increase thickness (by percent of its own)
-= : set thickness (to percentage of length)
-* : draw leaf
-% : set thickness reduction (for every draw operation)
+- > and < are not rolling
+- > : decrease thickness (by percent of its own)
+- < : increase thickness (by percent of its own)
+- = : set thickness (to percentage of length)
+- * : draw leaf
+- % : set thickness reduction (for every draw operation)
 
 The major component of L++ is that it supports leafs, so it needs to save its output to OFF+ files to properly reflect leaf textures. Leaves are also affected by gravity, and their tip bends towards ground.
 
