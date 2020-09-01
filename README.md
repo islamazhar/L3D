@@ -1,4 +1,6 @@
-# This is an extended 3D L-System mesh implementation that can generate trees and bushes very easily and rapidly.
+About:
+---------------------------------
+This is an extended 3D L-System mesh implementation that can generate trees and bushes very easily and rapidly.
 
 Tools used:
 ------------------------------------
@@ -27,7 +29,8 @@ A sample L (or L3D, they are the same) file is as follows:
 5 #thickness of branches compared to their length in percent
 F #the axiom, a tree starts with this
 F=F[-&<F][<++&F]|F[-&>F][+&F] #a rule, this is recursively applied to the axiom to generate the tree string
-# we can have multiple rules, all of them are evaluated in each recursion iteration
+
+we can have multiple rules, all of them are evaluated in each recursion iteration
 @ #end of L file
 
 
