@@ -64,7 +64,12 @@ Instructions for L (or L3D) files are as follows (for generation of rules):
 
 Any of those that require a number, work on the default number by default. You can provide another number by providing it in paranthesis, for example:
 
+
+<code>
 +(90)&(75.5)
+</code>
+
+
 
 The L++ format is slightly different, in the following ways:
 - `> and < are not rolling`
