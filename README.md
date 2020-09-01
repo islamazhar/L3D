@@ -54,8 +54,8 @@ Instructions for L (or L3D) files are as follows (for generation of rules):
 - & = pitch down
 - ^ = pitch up
 - < or \ = roll left
-- > or / = roll right
-- | = turn 180 degree
+- `> or / = roll right`
+- `| = turn 180 degree`
 - f or F = draw branch (and go forward)
 - g = go forward
 - [ = save state
