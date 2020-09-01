@@ -78,7 +78,7 @@ To run the system and generate a tree, simply do the following:
 ./run L++/tree.l++
 
 
-
-
+Acknowledgements:
+---------------------------------
 
 The code relies on the C++ 3D code-set created by people at Princeton University (Connelly Barnes gave it to me).
