@@ -23,6 +23,7 @@ LSystem class implements an L-System, which is a set of rules generating a huge 
 Rule files formate:
 -------------------------------------------------------------------------------
 A sample L (or L3D, they are the same) file is as follows:
+<code>
 - #this is a comment line
 - 3 #the number of recursions for generating rules from the axiom
 - 12 #default number for rotations, turns, and etc.
@@ -30,7 +31,7 @@ A sample L (or L3D, they are the same) file is as follows:
 - F #the axiom, a tree starts with this
 - F=F[-&<F][<++&F]|F[-&>F][+&F] #a rule, this is recursively applied to the axiom to generate the tree string
 - @ #end of L file
-
+</code>
 we can have multiple rules, all of them are evaluated in each recursion iteration
 
 
