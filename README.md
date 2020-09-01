@@ -4,10 +4,10 @@ This is an extended 3D L-System mesh implementation that can generate trees and 
 
 Tools used:
 ------------------------------------
-- C++
-- OpenGL + glut
-- bash
-- matlab
+  - C++
+  - OpenGL + glut
+  - bash
+  - matlab
 
 
 It is cross-platform. Everything is implemented as simply as possible, to allow modification to achieve any desired outcome.
@@ -80,8 +80,10 @@ How to run:
 -------------------------------------------------------------------------
 To run the system and generate a tree, simply do the following:
 
-./run L++/tree.l++
 
+<code>
+./run L++/tree.l++
+</code>
 
 Acknowledgements:
 ---------------------------------
