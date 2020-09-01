@@ -1,6 +1,14 @@
-This is an extended 3D L-System mesh implementation that can generate trees and bushes very easily and rapidly.
+# This is an extended 3D L-System mesh implementation that can generate trees and bushes very easily and rapidly.
 
-It is written in C++ using OpenGL and glut, and is cross-platform. Everything is implemented as simply as possible, to allow modification to achieve any desired outcome.
+Tools used:
+------------------------------------
+- C++
+- OpenGL + glut
+- bash
+- matlab
+
+
+It is cross-platform. Everything is implemented as simply as possible, to allow modification to achieve any desired outcome.
 
 The library supports L files (plain L-System 2D trees), L3D files (3D L-System trees) and L++ files (extended 3D L-System trees).
 
@@ -10,6 +18,8 @@ Turtle implements a turtle graphics system, which is a graphics model where you 
 
 LSystem class implements an L-System, which is a set of rules generating a huge string of steps for the turtle, to draw a tree. L-System generates those strings from .l or .l3d or .l++ files and then feeds them to turtle to consume. The extended LSystem which is called LPlusSystem has a better parser which features many more commands and stockastic control over the rules.
 
+Rule files:
+-------------------------------------------------------------------------------
 A sample L (or L3D, they are the same) file is as follows:
 #this is a comment line
 3 #the number of recursions for generating rules from the axiom
@@ -61,6 +71,8 @@ The L++ format is slightly different, in the following ways:
 
 The major component of L++ is that it supports leafs, so it needs to save its output to OFF+ files to properly reflect leaf textures. Leaves are also affected by gravity, and their tip bends towards ground.
 
+How to run:
+-------------------------------------------------------------------------
 To run the system and generate a tree, simply do the following:
 
 ./run L++/tree.l++
