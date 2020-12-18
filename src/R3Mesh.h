@@ -130,6 +130,7 @@ struct R3Mesh {
   R3Shape Cylinder(float topBottomRatio=1.0,int slices=100);
   R3Shape Circle(float radius,int slices=0);
   R3Shape Leaf(const R3Vector direction=R3zero_vector);
+  R3Shape Surface();
 
   // Update functions
   void Update(void);

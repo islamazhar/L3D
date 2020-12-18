@@ -41,7 +41,7 @@ public:
   void restore();
   void draw(float param);
   void drawLeaf(float param);
-
+  void drawSurface();  
 };
 
 #endif

@@ -37,7 +37,7 @@ static R3Point pick_position = R3zero_point;
 static bool pick_active = false;
 static int show_faces = 1;
 static int show_edges = 0;
-static int show_sonar = 1;
+static int show_sonar = 0;
 static int show_vertices = 0;
 static int show_normals = 0;
 static int show_curvatures = 0;
@@ -208,7 +208,7 @@ GLuint LoadTexture( const char * filename ,int width,int height)
 
  return texture;
 }
-GLuint tree,leaf, filteredLeaf;
+GLuint tree,leaf, filteredLeaf, ground ;
 void GLUTTexture()
 {
 
@@ -219,8 +219,9 @@ void GLUTTexture()
   tree=LoadTexture("textures/lightwood.bmp",512,512);
   leaf=LoadTexture("textures/leaf.bmp",512,512);
   filteredLeaf = LoadTexture("textures/filtered_leaf.bmp",512,512);
-
+  ground = LoadTexture("texture/ground.jpg", 512, 512);
 }
+
 void GlutDrawAxes(){
 
 	if(drawaxes==1){
@@ -286,13 +287,17 @@ void GLUTRedraw(void)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess); 
     for (int i = 0; i < mesh->NFaces(); i++) {
       R3MeshFace *face = mesh->Face(i);
-      if (face->isLeaf == 1) {
+      if (face->isLeaf == 1 || face->isLeaf == 2) {
           // in the beam
           glBindTexture(GL_TEXTURE_2D, leaf);
       }
       else if (face->isLeaf == 2) {
           // not in the beam
           glBindTexture(GL_TEXTURE_2D, filteredLeaf);
+      }
+      else if (face -> isLeaf == 3) {
+          // surface
+          glBindTexture(GL_TEXTURE_2D, ground);
       }
       else {
           // this is a branch
@@ -368,13 +373,22 @@ void GLUTRedraw(void)
       glBegin(GL_POINTS);
       for (int i = 0; i < sonar_beam_siz; i++) {
           R3MeshVertex *vertex = mesh->sonar_beam_vertices[i];
-         /// double length = vertex->AverageEdgeLength();
+          double length = vertex->AverageEdgeLength();
           const R3Point& p = vertex->position;
-        //  R3Vector v = length * vertex->normal;
+          R3Vector v = length * vertex->normal;
         //  cout << length << endl;
           //cout << p[0] << " " << p[1] << " " <<p[2] << endl;
+          if(i == 0) {
+              // the following codes to higlight the sonar loc do not work :-(
+              glColor3d(0, 0, 1);
+              glPointSize(20);
+              glVertex3f(p[0], p[1], p[2]);
+              glColor3d(0, 1, 0);
+              glPointSize(0.5);
+              continue;
+          }
           glVertex3f(p[0], p[1], p[2]);
-        //  glVertex3f(p[0] + v[0], p[1] + v[1], p[2] + v[2]);
+          glVertex3f(p[0] + v[0], p[1] + v[1], p[2] + v[2]);
       }
       glEnd();
   }

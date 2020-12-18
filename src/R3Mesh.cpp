@@ -38,7 +38,19 @@ R3Shape R3Mesh::Leaf(const R3Vector direction)
   face.push_back(CreateVertex(R3Point(-.2,.6,z/2) ,R2Point(.3,.6) ));
   face.push_back(CreateVertex(R3Point(-.25,.3,0) ,R2Point(.25,.3) ));
   face.push_back(CreateVertex(R3Point(-.2,.1,0) ,R2Point(.3,.1) ));
-  CreateFace(face)->isLeaf=true;
+  CreateFace(face)->isLeaf = 3;
+  return face;
+}
+R3Shape R3Mesh::Surface()
+{
+  vector<R3MeshVertex *> face;
+  face.push_back(CreateVertex(R3Point(-50,0,-50), R2Point(0, 0)));
+  face.push_back(CreateVertex(R3Point(-50,0,50), R2Point(0, 0.0)));
+  face.push_back(CreateVertex(R3Point(50,0,-50), R2Point(0, 0.0)));
+  face.push_back(CreateVertex(R3Point(50,0,50), R2Point(0, 0.0)));
+  face.push_back(CreateVertex(R3Point(25,0,25), R2Point(0, 0.0)));
+  face.push_back(CreateVertex(R3Point(-25,0,-25), R2Point(0, 0.0)));
+  CreateFace(face)->isLeaf = false;
   return face;
 }
 
@@ -159,17 +171,24 @@ Tree(const char * descriptor_filename,const int iterations)
   // read the tree locations
 
   ifstream tree_location_file("test.csv");
+  // this should be generated from IPP
   if(!tree_location_file) {
         cout << "Can not open tree location files\n";
         exit(1);
   }
   double x,z;
-
+  bool flag = false;
   while(!tree_location_file.eof()){
     tree_location_file >> x >> z;
+   // cout << x << " --> " << z << endl;
     R3Vector origin(x,0,z);
     string lsystem=l.generateFromFile(descriptor_filename,iterations, origin);
     l.draw(lsystem);
+    if (flag == true) {
+      l.turtle.drawSurface();
+    }
+    flag = false;
+
   }
   Update();
 }

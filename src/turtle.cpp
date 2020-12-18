@@ -104,6 +104,13 @@ void TurtleSystem::restore()
   reduction=t.reduction;
   // (Turtle)*this=t; //FIXME: doesn't work, figure out why!
 }
+void TurtleSystem::drawSurface()
+{
+
+    R3Shape s=mesh->Surface(); // this creates a face for the surface
+    
+}
+
 void TurtleSystem::drawLeaf(float param)
 {
 
@@ -144,7 +151,9 @@ void TurtleSystem::draw(float param)
     fprintf(fp, "%lf %lf %lf\n",param, thickness, reduction);
     */
     static int num=0;
-  if (num++ % 1000 ==0) cout <<num<<" drawing"<<endl;
+  if (num++ % 1000 ==0) {
+     // cout <<num<<" drawing"<<endl;
+  }
 
   int slices;
   if (thickness<.2)

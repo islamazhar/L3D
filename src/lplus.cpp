@@ -15,7 +15,7 @@ string LPlusSystem::generateFromFile(const char * filename,const int iterationsO
 	{
 		isPlus=true;
 	}
-	cout << "calling L-system from LPlus" << endl;
+//	cout << "calling L-system from LPlus" << endl;
 	return LSystem::generateFromFile(filename,iterationsOverride, origin);
 }
 
@@ -75,11 +75,12 @@ void LPlusSystem::run(const char command,const float param, bool drawALeaf=false
 		case 'F':
 		case 'f':
 		//cout << rand_num << endl;
-		//rand_num = (double)rand() / RAND_MAX;
-		rand_num = 1;
+		rand_num = (double)rand() / RAND_MAX ;
+		rand_num *= 2.00;
+		// rand_num = 1;
 		turtle.draw(rand_num);
 		turtle.move(rand_num);
-		// this can be used to change the branch heights...
+		// this can be used to change the random forword move...
 		//turtle.draw(1);
 		//turtle.move(1);
 		break;
@@ -89,7 +90,9 @@ void LPlusSystem::run(const char command,const float param, bool drawALeaf=false
 		turtle.move(-0.3);
 		break;
 		case '[':
-		    rand_num = 0.3;
+		// this is used for branch heights
+		    rand_num = (double)rand() / RAND_MAX;
+		  //  rand_num = 0.3;
 		  //  turtle.move(-rand_num);
 		    turtle.save();
 			// For branch height

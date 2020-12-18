@@ -2,9 +2,9 @@
 #include <fstream>
 #include <stack>
 #include <bits/stdc++.h>
-
-
 using namespace std;
+
+
 void LSystem::replaceAll(string& str, const string& from, const string& to) 
 {
 	if(from.empty())
@@ -20,6 +20,7 @@ void LSystem::replaceAll(string& str, const string& from, const string& to)
     //cout << str << endl;
     fclose(fp);
 }
+
 string LSystem::produce(const string axiom, const AssociativeArray rules)
 {
 	string t=axiom;
@@ -42,7 +43,7 @@ string LSystem::reproduce(const string axiom,const AssociativeArray rules, const
 }
 string LSystem::generateFromFile(const char * filename,const int iterationsOverride, const R3Vector origin)
 {
-	cout <<"Generating L-System data..."<<endl;
+	//cout <<"Generating L-System data..."<<endl;
 	ifstream file(filename);
 	if (!file)
 	{
@@ -84,6 +85,12 @@ string LSystem::generateFromFile(const char * filename,const int iterationsOverr
 	}
 
 	int iterations=(int)numbers[0];
+	/*
+	double temp1 = rand()/static_cast<double>(RAND_MAX);
+	iterations = 1 + static_cast<int>(temp1 * (5-1));
+	*/
+    iterations = (rand() %iterations) + 1;
+	printf("Iterations = %d\n",iterations);
 	if (iterationsOverride)
 		iterations=iterationsOverride;
 	defaultCoefficient=numbers[1];
@@ -145,10 +152,8 @@ void LSystem::run(const char command,const float param, bool drawALeaf)
 		default:
 		;
 	}
-
-
-
 }
+
 /*
 * Run is the function which calls the function.
 *I think there is a problem with flag[i-1].So far some-how works.
@@ -156,12 +161,12 @@ void LSystem::run(const char command,const float param, bool drawALeaf)
 
 void LSystem::draw(const string tree)
 {
-
+	
     cout << turtle.position.X() << " " << \
     turtle.position.Y() << " " << turtle.position.Z() << endl;
 
     srand(time(NULL));
-    cout << "inside L-system draw" << endl;
+   // cout << "inside L-system draw" << endl;
 	char paramBuf[1024];
 	int bufIndex=0;
 	string data=tree;
@@ -190,7 +195,7 @@ void LSystem::draw(const string tree)
 	    cout << "Before looping " << data[i] << " " << flag[i] << endl;
 	}
     */
-	printf("Max value = %d\n",max_val);
+//	printf("Max value = %d\n",max_val);
 
 	for (int i=0;i<(int)data.size();i++)
 	{
